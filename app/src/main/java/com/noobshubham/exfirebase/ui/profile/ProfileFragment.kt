@@ -2,7 +2,6 @@ package com.noobshubham.exfirebase.ui.profile
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import com.noobshubham.exfirebase.databinding.FragmentProfileBinding
 import java.util.*
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -25,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.noobshubham.exfirebase.R
+import java.text.SimpleDateFormat
 
 class ProfileFragment : Fragment() {
 
@@ -54,9 +53,21 @@ class ProfileFragment : Fragment() {
             selectImage()
         }
 
-        var username: String
         binding.profileName.text = auth.currentUser?.displayName.toString()
         binding.profileEmail.editText?.setText(auth.currentUser?.email.toString())
+
+        // date of birth code goes here
+        val calendar = Calendar.getInstance()
+        val datePicker = DatePickerDialog.OnDateSetListener {
+            view, year, month, dayOfMonth ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            binding.profileBirthday.editText?.setText("$dayOfMonth/$month/$year")
+        }
+        binding.profileBirthday.setEndIconOnClickListener {
+            DatePickerDialog(requireContext(), datePicker, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
 
         // Gender
         val items = listOf("MALE", "FEMALE")
