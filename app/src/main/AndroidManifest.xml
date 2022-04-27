@@ -35,6 +35,7 @@
             android:theme="@style/Theme.ExFirebase.NoActionBar">
 
 
+
         </activity>
     </application>
 
